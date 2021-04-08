@@ -18,28 +18,40 @@ Instances of the Mayastor pod _must_ be run in privileged mode
 
 #### Linux commands to ensure nodes meet the requirements
 
+This section highlights the commands needed to ensure the Kuberetes nodes in the cluster are supported. 
+
+
 To confirm SSE4.2 support:
 
-`lshw -class processor | grep -w sse2`
+```
+lshw -class processor | grep -w sse2
+```
 
 If the `grep` command output includes `sse2` then your nodes will be supported.
 
-To confirm memory available: 
+To confirm enough memory is available on the node: 
 
-`cat /proc/meminfo`
+```
+cat /proc/meminfo
+```
 
-If you have atleast 4,000,000 kB available on your target then proceed to the next checks.
+If you have atleast 4,000,000 kB available then proceed to the next check for HugePage support.
 
 To confirm HugePage support: 
 
 First step, ensure that 1GB page support is enabled for your CPU:
-`cat /proc/cpuinfo | grep flags | head -n 1 | grep -w "pdbe1gb"`
+
+```
+cat /proc/cpuinfo | grep flags | head -n 1 | grep -w "pdbe1gb"
+```
 
 If the output confirms that huge pages are supported then continue on the second step.
 
 Second step, check for Hugepagesupport in memory: 
 
-`grep Hugepagesize /proc/meminfo`
+```
+grep Hugepagesize /proc/meminfo
+```
 
 If the output confirms that `Hugepagesize` is set to `2048 kB` then you are all set. 
 
